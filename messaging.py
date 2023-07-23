@@ -13,11 +13,5 @@ class Messaging(commands.Cog):
     async def mirror(self,ctx,arg):
         await ctx.send(str(arg))
 
-    @commands.command(name="countdown")
-    async def countdown(self,ctx,arg):
-        for x in range(int(arg),0,-1):
-            await ctx.send(x)
-            sleep(1)
-
 async def setup(bot):
     await bot.add_cog(Messaging(bot))

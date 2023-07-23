@@ -13,7 +13,7 @@ class Bot(commands.Bot):
             intents=discord.Intents.all(),
             command_prefix="!"
         )
-        self.initial_extensions = ["messaging"]
+        self.initial_extensions = ["messaging","clock"]
 
     async def setup_hook(self):
         for extension in self.initial_extensions:
