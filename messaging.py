@@ -1,8 +1,5 @@
 import asyncio
-
-import discord
 from discord.ext import commands
-from time import sleep
 class Messaging(commands.Cog):
     def __init__(self,bot):
         self.bot = bot

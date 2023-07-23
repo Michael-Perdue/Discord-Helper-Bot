@@ -1,6 +1,3 @@
-# This is a sample Python script.
-import asyncio
-
 import discord
 from discord.ext import commands
 import os
@@ -24,7 +21,6 @@ class Bot(commands.Bot):
         for server in self.guilds:
             print(" " + str(server))
         print("")
-
 
 bot = Bot()
 
