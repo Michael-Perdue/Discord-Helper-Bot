@@ -5,18 +5,16 @@ import discord
 from discord.ext import commands
 import os
 
-#bot = commands.Bot(command_prefix="!", intents=discord.Intents.all()
-
 class Bot(commands.Bot):
     def __init__(self):
         super().__init__(
             intents=discord.Intents.all(),
             command_prefix="!"
         )
-        self.initial_extensions = ["messaging","clock"]
+        self.init_extensions = ["messaging","clock"]
 
     async def setup_hook(self):
-        for extension in self.initial_extensions:
+        for extension in self.init_extensions:
             await self.load_extension(extension)
 
     async def on_ready(self):
