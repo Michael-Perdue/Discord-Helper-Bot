@@ -19,10 +19,11 @@ class Bot(commands.Bot):
 
     async def on_ready(self):
         botID = str(self.user)
-        print(botID + " is online")
+        print(botID + " is online\n")
         print(botID + " has connected to:")
         for server in self.guilds:
             print(" " + str(server))
+        print("")
 
 
 bot = Bot()
