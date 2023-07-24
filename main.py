@@ -9,7 +9,7 @@ class Bot(commands.Bot):
             intents=discord.Intents.all(),
             command_prefix="!"
         )
-        self.init_extensions = ["messaging","clock"]
+        self.init_extensions = ["messaging","clock","moderation"]
 
     async def setup_hook(self):
         for extension in self.init_extensions:
@@ -27,6 +27,8 @@ class Bot(commands.Bot):
         if isinstance(error,commands.CommandNotFound):
             await ctx.send(str(ctx.message.author.mention) + " Error no command is found with the name \'" + ctx.message.content.replace("!","") + "\'")
             log_message(ctx,"Error unknown command \'" + ctx.message.content.replace("!","") + "\'\n")
+        else:
+            raise error
 
 
 bot = Bot()
