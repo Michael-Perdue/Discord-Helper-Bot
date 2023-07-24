@@ -1,6 +1,9 @@
 import asyncio
+import time
 from discord.ext import commands
 class Clock(commands.Cog):
+    stopwatches = {}
+
     def __init__(self,bot):
         self.bot = bot
 
@@ -19,6 +22,18 @@ class Clock(commands.Cog):
         self.log_message(ctx,"Timer command:\n   time: "+str(arg)+" seconds\n")
         await asyncio.sleep(int(arg))
         await ctx.send(str(ctx.message.author.mention) + " " + str(arg) + "s timer finished")
+
+    @commands.command(name="stopwatch")
+    async def stopwatch(self,ctx,arg):
+        if(arg == "start"):
+            self.stopwatches[ctx.message.author] = time.time()
+            await ctx.send(str(ctx.message.author.mention) + " stopwatch started")
+        elif(arg == "stop"):
+            time_elapsed = time.time()-self.stopwatches[ctx.message.author]
+            self.stopwatches.pop(ctx.message.author)
+            await ctx.send(str(ctx.message.author.mention) + " stopwatch stopped\n   Total time elapsed: " + str(time_elapsed)+ "    seconds")
+        else:
+            await ctx.send(str(ctx.message.author.mention) + " incorrect use of stopwatch please either do !stopwatch start or !stopwatch stop")
 
 
 async def setup(bot):
