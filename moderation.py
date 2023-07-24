@@ -10,9 +10,20 @@ class Moderation(commands.Cog):
         self.bot = bot
 
     @commands.command(name="ban")
-    async def ban(self,ctx,member: discord.Member,reason):
-        log_message(ctx,"ban command:\n   user being banned: "+str(member)+"\n   reason: \'" + str(reason) + "\'\n")
-        await member.ban(reason=str(reason))
+    async def ban(self,ctx,member: discord.Member,*reason):
+        reason = " ".join(reason)
+        log_message(ctx,"ban command:\n   user being banned: "+str(member)+"\n   reason: \'" + reason + "\'\n")
+        await ctx.message.delete()
+        await ctx.send(ctx.message.author.mention + " has banned " + str(member.mention) + " for: " + reason)
+        await member.ban(reason=reason)
+
+    @commands.command(name="kick")
+    async def kick(self,ctx,member: discord.Member,*reason):
+        reason = " ".join(reason)
+        log_message(ctx,"kick command:\n   user being kicked: "+str(member)+"\n   reason: \'" + reason + "\'\n")
+        await ctx.message.delete()
+        await ctx.send(ctx.message.author.mention + " has kicked " + str(member.mention) + " for: " + reason)
+        await member.kick(reason=reason)
 
 async def setup(bot):
     await bot.add_cog(Moderation(bot))
