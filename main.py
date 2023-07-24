@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import os
 
+
 class Bot(commands.Bot):
     def __init__(self):
         super().__init__(
@@ -22,10 +23,16 @@ class Bot(commands.Bot):
             print(" " + str(server))
         print("")
 
+    async def on_command_error(self, ctx , error):
+        if isinstance(error,commands.CommandNotFound):
+            await ctx.send(str(ctx.message.author.mention) + " Error no command is found with the name \'" + ctx.message.content.replace("!","") + "\'")
+            log_message(ctx,"Error unknown command \'" + ctx.message.content.replace("!","") + "\'\n")
+
+
 bot = Bot()
 
-async def load_extensions():
-    await bot.load_extension('messaging')
+def log_message(ctx, message):
+    print(message + "   sent by: " + str(ctx.message.author) + "\n   on server: " + str(ctx.guild))
 
 def main():
     while True:
