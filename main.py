@@ -1,9 +1,11 @@
 import discord
+from discord import Message
 from discord.ext import commands
 import os
+import re
 
 class Bot(commands.Bot):
-
+    banned_words = ["aaa"]
     def __init__(self):
         """
         This function sets the bot up to have the right intents and command prefixes
@@ -62,6 +64,17 @@ class Bot(commands.Bot):
             log_message(ctx,"Error unknown command \'" + ctx.message.content.replace("!","") + "\'\n")
         else:
             raise error
+
+    async def on_message(self, message: Message):
+        if(message.author.id != self.user.id):
+            check_word = [word for word in self.banned_words if(re.search(("(^|\s)"+word+"($|\s)"),message.content))]
+            if bool(check_word):
+                await message.delete()
+                await discord.utils.get(message.guild.channels, name="moderation").send(message.author.mention + " just tried to use banned word/s \'" + "\' \'".join(check_word) + "\' in channel: " + message.channel.mention )
+            else:
+                await self.process_commands(message)
+        else:
+            await self.process_commands(message)
 
 
 bot = Bot()
