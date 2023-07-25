@@ -36,17 +36,28 @@ class Moderation(commands.Cog):
         else:
             raise error
 
+    async def delete_all_messages(self,channel,member):
+        all_messages = channel.history(limit=None)
+        async for message in all_messages:
+            if message.author.id == member.id:
+                await message.delete()
+                await asyncio.sleep(1)  # This has to be done due to throttle limiting of deletions
 
     @commands.command(name="delete")
     async def delete(self,ctx: commands.Context,member: discord.Member):
         log_message(ctx,"delete command:\n   user's messages being deleted: "+str(member)+"\n")
         # NOTE history is used over purge with a check lamda due to purge only being able to search the last 100 messages so if the user is not active the command wouldn't have worked
-        all_messages = ctx.channel.history(limit=None)
-        async for message in all_messages:
-            if message.author.id == member.id:
-                await message.delete()
-                await asyncio.sleep(1)  # This has to be done due to throttle limiting of deletions
+        await self.delete_all_messages(ctx.channel,member)
         await ctx.send(ctx.message.author.mention + " has deleted all of " + str(member.mention) + " messages from this channel")
+
+    @commands.command(name="deleteall")
+    async def delete_all(self,ctx: commands.Context,member: discord.Member):
+        log_message(ctx,"deleteAll command:\n   user's messages being deleted: "+str(member)+"\n")
+        channels = ctx.guild.text_channels
+        for channel in channels:
+            await self.delete_all_messages(channel=channel,member=member)
+        # NOTE history is used over purge with a check lamda due to purge only being able to search the last 100 messages so if the user is not active the command wouldn't have worked
+        await ctx.send(ctx.message.author.mention + " has deleted all of " + str(member.mention) + " messages")
 
     @commands.command(name="clear")
     async def clear(self,ctx: commands.Context,size: int):

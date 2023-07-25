@@ -67,7 +67,6 @@ def log_message(ctx, message):
 def main():
     while True:
         bot.run(os.environ['TOKEN'])
-        bot.lo
 
 if __name__ == '__main__':
     main()
