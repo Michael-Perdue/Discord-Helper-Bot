@@ -73,7 +73,5 @@ class Messaging(commands.Cog):
         else:
             raise error
 
-
-
 async def setup(bot):
     await bot.add_cog(Messaging(bot))

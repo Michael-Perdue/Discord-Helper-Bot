@@ -17,14 +17,6 @@ class Moderation(commands.Cog):
         await ctx.send(ctx.message.author.mention + " has banned " + str(member.mention) + " for: " + reason)
         await member.ban(reason=reason)
 
-    @ban.error
-    async def ban_error(self,ctx,error):
-        if isinstance(error, commands.MemberNotFound):
-            log_message(ctx,"incorrect use of ban command user does not exist:\n")
-            await ctx.message.delete()
-            await ctx.send(ctx.message.author.mention + " Incorrect use of ban command user does not exist!")
-        else:
-            raise error
 
     @commands.command(name="kick")
     async def kick(self,ctx,member: discord.Member,*reason):
@@ -35,12 +27,34 @@ class Moderation(commands.Cog):
         await member.kick(reason=reason)
 
     @kick.error
-    async def kick_error(self,ctx,error):
+    @ban.error
+    async def ban_kick_error(self,ctx,error):
         if isinstance(error, commands.MemberNotFound):
-            log_message(ctx,"incorrect use of kick command user does not exist:\n")
+            log_message(ctx,"incorrect use of "+ctx.command.name+" command user does not exist:\n")
             await ctx.message.delete()
-            await ctx.send(ctx.message.author.mention + " Incorrect use of kick command user does not exist!")
+            await ctx.send(ctx.message.author.mention + " Incorrect use of "+ctx.command.name+ " command user does not exist!")
         else:
             raise error
+
+
+    @commands.command(name="delete")
+    async def delete(self,ctx: commands.Context,member: discord.Member):
+        log_message(ctx,"delete command:\n   user's messages being deleted: "+str(member)+"\n")
+        # NOTE history is used over purge with a check lamda due to purge only being able to search the last 100 messages so if the user is not active the command wouldn't have worked
+        all_messages = ctx.channel.history(limit=None)
+        async for message in all_messages:
+            if message.author.id == member.id:
+                await message.delete()
+                await asyncio.sleep(1)  # This has to be done due to throttle limiting of deletions
+        await ctx.send(ctx.message.author.mention + " has deleted all of " + str(member.mention) + " messages from this channel")
+
+    @commands.command(name="clear")
+    async def clear(self,ctx: commands.Context,size: int):
+        log_message(ctx,"clear command:\n   number of messages being deleted: "+str(size)+"\n")
+        for x in range(1+int(size/100)):   # purge has a max limit of 100 so this determines how many times to run purge
+            await ctx.channel.purge(limit=None)
+        await ctx.send(ctx.message.author.mention + " has deleted the last " + str(size) + " messages from this channel")
+
+
 async def setup(bot):
     await bot.add_cog(Moderation(bot))
