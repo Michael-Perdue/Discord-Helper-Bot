@@ -24,6 +24,16 @@ class Bot(commands.Bot):
         for extension in self.init_extensions:
             await self.load_extension(extension)
 
+    async def add_channel(self):
+        for guild in self.guilds:
+            channel_found = False
+            for channel in guild.text_channels:
+                if channel.name == "moderation":
+                    channel_found = True
+                    break
+            if channel_found == False:
+                await guild.create_text_channel(name="moderation")
+
     async def on_ready(self):
         """
         This function is called once the bot has been setup and it prints to the terminal that
@@ -35,6 +45,7 @@ class Bot(commands.Bot):
         for server in self.guilds:      # loops through all the servers that the bot is already setup to use
             print(" " + str(server))
         print("")
+        await self.add_channel()
 
     async def on_command_error(self, ctx , error):
         """
