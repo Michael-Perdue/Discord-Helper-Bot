@@ -17,6 +17,15 @@ class Moderation(commands.Cog):
         await ctx.send(ctx.message.author.mention + " has banned " + str(member.mention) + " for: " + reason)
         await member.ban(reason=reason)
 
+    @ban.error
+    async def ban_error(self,ctx,error):
+        if isinstance(error, commands.MemberNotFound):
+            log_message(ctx,"incorrect use of ban command user does not exist:\n")
+            await ctx.message.delete()
+            await ctx.send(ctx.message.author.mention + " Incorrect use of ban command user does not exist!")
+        else:
+            raise error
+
     @commands.command(name="kick")
     async def kick(self,ctx,member: discord.Member,*reason):
         reason = " ".join(reason)
@@ -25,5 +34,13 @@ class Moderation(commands.Cog):
         await ctx.send(ctx.message.author.mention + " has kicked " + str(member.mention) + " for: " + reason)
         await member.kick(reason=reason)
 
+    @kick.error
+    async def kick_error(self,ctx,error):
+        if isinstance(error, commands.MemberNotFound):
+            log_message(ctx,"incorrect use of kick command user does not exist:\n")
+            await ctx.message.delete()
+            await ctx.send(ctx.message.author.mention + " Incorrect use of kick command user does not exist!")
+        else:
+            raise error
 async def setup(bot):
     await bot.add_cog(Moderation(bot))

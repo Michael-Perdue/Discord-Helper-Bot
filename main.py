@@ -11,7 +11,8 @@ class Bot(commands.Bot):
         """
         super().__init__(
             intents=discord.Intents.all(),
-            command_prefix="!"
+            command_prefix="!",
+            allowed_mentions=discord.AllowedMentions(everyone=True,roles=True,replied_user=True,users=True)
         )
         self.init_extensions = ["messaging","clock","moderation"]
 
