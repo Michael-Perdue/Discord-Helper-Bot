@@ -72,6 +72,33 @@ class Moderation(commands.Cog):
             await ctx.channel.purge(limit=None)
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has deleted the last " + str(size) + " messages from " + ctx.channel.mention)
 
+    @commands.command(name="banword")
+    async def ban_word(self,ctx: commands.Context,word: str):
+        lines = open("banned_words.txt", "r").readlines()
+        lines = [str(line.replace("\n","") + " " + word + "\n") for line in lines if str(ctx.guild.id) in line]
+        log_message(ctx,"ban word command:\n   word banned: "+word+"\n")
+        file = open("banned_words.txt","w")
+        file.writelines(lines)
+        file.close()
+        self.bot.banned_words[ctx.guild.id] = (self.bot.banned_words[ctx.guild.id] + [word])
+        await ctx.message.delete()
+        await self.moderation_channel(ctx).send(ctx.message.author.mention + " has banned the word: " + word)
+
+    def read_banned_words(self):
+        file = open("banned_words.txt","r")
+        for x in file:
+            print(x)
+            split_line = list(x.replace("\n","").split(" "))
+            self.banned_words[int(split_line[0])] = split_line[1:]
+        file.close()
+
+    def add_guilds(self):
+        file = open("banned_words.txt","a")
+        found_guilds = self.banned_words.keys()
+        for guild in self.guilds:
+            if guild.id not in found_guilds:
+                file.write(str(guild.id) + "\n")
+        file.close()
 
 async def setup(bot):
     await bot.add_cog(Moderation(bot))
