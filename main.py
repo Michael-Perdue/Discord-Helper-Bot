@@ -86,7 +86,7 @@ class Bot(commands.Bot):
             raise error
 
     async def on_message(self, message: Message):
-        if(message.author.id != self.user.id):
+        if(message.author.id != self.user.id and "!unbanword" not in message.content):
             check_word = [word for word in self.banned_words[message.guild.id] if(re.search(("(^|\s)"+word+"($|\s)"),message.content))]
             if bool(check_word):
                 await message.delete()

@@ -1,6 +1,6 @@
 import asyncio
 import time
-
+import re
 import discord
 from discord.ext import commands
 from main import log_message
@@ -83,6 +83,18 @@ class Moderation(commands.Cog):
         self.bot.banned_words[ctx.guild.id] = (self.bot.banned_words[ctx.guild.id] + [word])
         await ctx.message.delete()
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has banned the word: " + word)
+
+    @commands.command(name="unbanword")
+    async def unban_word(self,ctx: commands.Context,word: str):
+        lines = open("banned_words.txt", "r").readlines()
+        lines = [re.sub(("(^|\s)"+word+"($|\s)"),"",line) for line in lines if str(ctx.guild.id) in line]
+        log_message(ctx,"unban word command:\n   word unbanned: "+word+"\n")
+        file = open("banned_words.txt","w")
+        file.writelines(lines)
+        file.close()
+        self.bot.banned_words[ctx.guild.id] = [word1 for word1 in self.bot.banned_words[ctx.guild.id] if word1 != word]
+        await ctx.message.delete()
+        await self.moderation_channel(ctx).send(ctx.message.author.mention + " has unbanned the word: " + word)
 
     def read_banned_words(self):
         file = open("banned_words.txt","r")
