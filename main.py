@@ -5,7 +5,7 @@ import os
 import re
 
 class Bot(commands.Bot):
-    banned_words = ["aaa"]
+    banned_words = {}
     def __init__(self):
         """
         This function sets the bot up to have the right intents and command prefixes
@@ -26,15 +26,21 @@ class Bot(commands.Bot):
         for extension in self.init_extensions:
             await self.load_extension(extension)
 
-    async def add_channel(self):
+    def read_banned_words(self):
+        file = open("banned_words.txt","r")
+        for x in file:
+            print(x)
+            split_line = list(x.replace("\n","").split(" "))
+            self.banned_words[int(split_line[0])] = split_line[1:]
+        file.close()
+
+    def add_guilds(self):
+        file = open("banned_words.txt","a")
+        found_guilds = self.banned_words.keys()
         for guild in self.guilds:
-            channel_found = False
-            for channel in guild.text_channels:
-                if channel.name == "moderation":
-                    channel_found = True
-                    break
-            if channel_found == False:
-                await guild.create_text_channel(name="moderation")
+            if guild.id not in found_guilds:
+                file.write(str(guild.id) + "\n")
+        file.close()
 
     async def on_ready(self):
         """
@@ -46,8 +52,22 @@ class Bot(commands.Bot):
         print(botID + " has connected to:")
         for server in self.guilds:      # loops through all the servers that the bot is already setup to use
             print(" " + str(server))
+            print(" " + str(server.id))
         print("")
-        await self.add_channel()
+        self.read_banned_words()
+        self.add_guilds()
+        print("Banned word list: " + str(self.banned_words))
+
+    async def on_guild_join(self,guild):
+        self.add_guilds()
+        channel_found = False
+        for channel in guild.text_channels:
+            if channel.name == "moderation":
+                channel_found = True
+                break
+        if channel_found == False:
+            await guild.create_text_channel(name="moderation")
+        print("Bot has been added to server: "+ str(guild))
 
     async def on_command_error(self, ctx , error):
         """
@@ -67,7 +87,7 @@ class Bot(commands.Bot):
 
     async def on_message(self, message: Message):
         if(message.author.id != self.user.id):
-            check_word = [word for word in self.banned_words if(re.search(("(^|\s)"+word+"($|\s)"),message.content))]
+            check_word = [word for word in self.banned_words[message.guild.id] if(re.search(("(^|\s)"+word+"($|\s)"),message.content))]
             if bool(check_word):
                 await message.delete()
                 await discord.utils.get(message.guild.channels, name="moderation").send(message.author.mention + " just tried to use banned word/s \'" + "\' \'".join(check_word) + "\' in channel: " + message.channel.mention )
