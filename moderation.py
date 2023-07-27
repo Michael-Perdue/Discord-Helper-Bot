@@ -107,7 +107,7 @@ class Moderation(commands.Cog):
         await ctx.send(content=ctx.message.author.mention,embed=discord.Embed(title="Banned words",
                                                                               description="Using any of these words will lead to your message being delete and you possibly being kicked or banned.",
                                                                               colour=discord.Colour.red()
-                                                                              ).add_field(name="The list of banned words are :",value="\n".join(banned_words),inline=True))
+                                                                              ).add_field(name="The list of banned words are :",value="\n".join(banned_words),inline=True).set_thumbnail(url="https://raw.githubusercontent.com/Michael-Perdue/Discord-bot/master/ban.png"))
 
 async def setup(bot):
     await bot.add_cog(Moderation(bot))

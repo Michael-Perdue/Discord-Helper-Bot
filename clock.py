@@ -1,5 +1,7 @@
 import asyncio
 import time
+
+import discord
 from discord.ext import commands
 from main import log_message
 
@@ -39,7 +41,7 @@ class Clock(commands.Cog):
         await ctx.send(str(ctx.message.author.mention) + " " + str(arg) + "s timer finished")
 
     @commands.command(name="stopwatch")
-    async def stopwatch(self,ctx,arg):
+    async def stopwatch(self,ctx : commands.Context,arg):
         """
         This function deals with a user sending a !stopwatch command, and has 2 options start and stop.
         Start will store the user and the time in a key value pair and stop will then retrieve the time and see
@@ -54,12 +56,21 @@ class Clock(commands.Cog):
             await ctx.send(str(ctx.message.author.mention) + " stopwatch started")
         elif(arg == "stop"):
             time_elapsed = time.time()-self.stopwatches[ctx.message.author]
+            await ctx.send(content=ctx.message.author.mention, embed=discord.Embed(title="Stopwatch",
+                                                                                   description=(ctx.message.author.mention + " You have stopped your stopwatch "),
+                                                                                   colour=discord.Colour.blue()
+                                                                                   ).add_field(name="Start time", value=str(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(self.stopwatches[ctx.message.author]))), inline=True
+                                                                                   ).add_field(name="Stop time", value=str(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))), inline=True
+                                                                                   ).add_field(name="Time elapsed", value="{:.2f}".format(time_elapsed) + " seconds", inline=False))
             self.stopwatches.pop(ctx.message.author)
-            await ctx.send(str(ctx.message.author.mention) + " stopwatch stopped\n   Total time elapsed: " + str(time_elapsed) + " seconds")
             log_message(ctx, "Stopwatch command stopped:\n   time elapsed: " + str(time_elapsed) + " seconds\n")
         elif(arg == "time"):
             time_elapsed = time.time()-self.stopwatches[ctx.message.author]
-            await ctx.send(str(ctx.message.author.mention) + " Total time elapsed: " + str(time_elapsed) + " seconds")
+            await ctx.send(content=ctx.message.author.mention, embed=discord.Embed(title="Stopwatch",
+                                                                                   description=(ctx.message.author.mention + " Information on your stopwatch "),
+                                                                                   colour=discord.Colour.blue()
+                                                                                   ).add_field(name="Start time", value=str(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(self.stopwatches[ctx.message.author]))), inline=True
+                                                                                   ).add_field(name="Time elapsed", value="{:.2f}".format(time_elapsed) + " seconds", inline=False))
             log_message(ctx, "Stopwatch command time checked:\n   time elapsed: " + str(time_elapsed) + " seconds\n")
         else:
             await ctx.send(str(ctx.message.author.mention) + " incorrect use of stopwatch please either do !stopwatch start or !stopwatch stop")
