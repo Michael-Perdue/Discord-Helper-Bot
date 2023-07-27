@@ -16,7 +16,7 @@ class Bot(commands.Bot):
             command_prefix="!",
             allowed_mentions=discord.AllowedMentions(everyone=True,roles=True,replied_user=True,users=True)
         )
-        self.init_extensions = ["messaging","clock","moderation"]
+        self.init_extensions = ["messaging","clock","moderation","fun"]
 
     async def setup_hook(self):
         """

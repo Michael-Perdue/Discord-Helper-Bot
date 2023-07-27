@@ -109,5 +109,7 @@ class Moderation(commands.Cog):
                                                                               colour=discord.Colour.red()
                                                                               ).add_field(name="The list of banned words are :",value="\n".join(banned_words),inline=True).set_thumbnail(url="https://raw.githubusercontent.com/Michael-Perdue/Discord-bot/master/ban.png"))
 
+        
+
 async def setup(bot):
     await bot.add_cog(Moderation(bot))

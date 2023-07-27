@@ -43,9 +43,9 @@ class Clock(commands.Cog):
     @commands.command(name="stopwatch")
     async def stopwatch(self,ctx : commands.Context,arg):
         """
-        This function deals with a user sending a !stopwatch command, and has 2 options start and stop.
+        This function deals with a user sending a !stopwatch command, and has 3 options start, time and stop.
         Start will store the user and the time in a key value pair and stop will then retrieve the time and see
-        how long has passed and return that to the user.
+        how long has passed and return that to the user and time will retrieve the start time and how long has passed.
         Example command: '!stopwatch start' and '!stopwatch stop'
         :param ctx: the context of the message
         :param arg: a string stating if you want to start the stopwatch or stop the stopwatch
