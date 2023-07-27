@@ -57,6 +57,10 @@ class Clock(commands.Cog):
             self.stopwatches.pop(ctx.message.author)
             await ctx.send(str(ctx.message.author.mention) + " stopwatch stopped\n   Total time elapsed: " + str(time_elapsed) + " seconds")
             log_message(ctx, "Stopwatch command stopped:\n   time elapsed: " + str(time_elapsed) + " seconds\n")
+        elif(arg == "time"):
+            time_elapsed = time.time()-self.stopwatches[ctx.message.author]
+            await ctx.send(str(ctx.message.author.mention) + " Total time elapsed: " + str(time_elapsed) + " seconds")
+            log_message(ctx, "Stopwatch command time checked:\n   time elapsed: " + str(time_elapsed) + " seconds\n")
         else:
             await ctx.send(str(ctx.message.author.mention) + " incorrect use of stopwatch please either do !stopwatch start or !stopwatch stop")
             log_message(ctx, "Invalid use of stopwatch command:\n   argument given: " + str(arg) + "\n")

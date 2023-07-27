@@ -68,8 +68,13 @@ class Moderation(commands.Cog):
     @commands.command(name="clear")
     async def clear(self,ctx: commands.Context,size: int):
         log_message(ctx,"clear command:\n   number of messages being deleted: "+str(size)+"\n")
+        total = size
         for x in range(1+int(size/100)):   # purge has a max limit of 100 so this determines how many times to run purge
-            await ctx.channel.purge(limit=None)
+            if total<100:
+                await ctx.channel.purge(limit=total)
+            else:
+                await ctx.channel.purge(limit=None)
+                total = total-100
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has deleted the last " + str(size) + " messages from " + ctx.channel.mention)
 
     @commands.command(name="banword")
@@ -96,21 +101,13 @@ class Moderation(commands.Cog):
         await ctx.message.delete()
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has unbanned the word: " + word)
 
-    def read_banned_words(self):
-        file = open("banned_words.txt","r")
-        for x in file:
-            print(x)
-            split_line = list(x.replace("\n","").split(" "))
-            self.banned_words[int(split_line[0])] = split_line[1:]
-        file.close()
-
-    def add_guilds(self):
-        file = open("banned_words.txt","a")
-        found_guilds = self.banned_words.keys()
-        for guild in self.guilds:
-            if guild.id not in found_guilds:
-                file.write(str(guild.id) + "\n")
-        file.close()
+    @commands.command(name= "banwords")
+    async def list_ban_words(self,ctx: commands.Context):
+        banned_words = self.bot.banned_words[ctx.guild.id]
+        await ctx.send(content=ctx.message.author.mention,embed=discord.Embed(title="Banned words",
+                                                                              description="Using any of these words will lead to your message being delete and you possibly being kicked or banned.",
+                                                                              colour=discord.Colour.red()
+                                                                              ).add_field(name="The list of banned words are :",value="\n".join(banned_words),inline=True))
 
 async def setup(bot):
     await bot.add_cog(Moderation(bot))

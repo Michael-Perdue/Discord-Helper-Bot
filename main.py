@@ -40,6 +40,7 @@ class Bot(commands.Bot):
         for guild in self.guilds:
             if guild.id not in found_guilds:
                 file.write(str(guild.id) + "\n")
+                self.banned_words[guild.id] = []
         file.close()
 
     async def on_ready(self):

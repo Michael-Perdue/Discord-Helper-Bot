@@ -57,7 +57,7 @@ class Messaging(commands.Cog):
         :param message: the string the user sends with the command to be forwarded
         """
         mention = member.mention
-        if(member.name[0] == "@"):  # this must be done to allow @everyone and other roles starting with @ to work otherwise it sends out @@everyon
+        if(member.name[0] == "@"):  # this must be done to allow @everyone and other roles starting with @ to work otherwise it sends out @@everyone
             mention = member.name
         message = " ".join(message)
         await ctx.message.delete()
