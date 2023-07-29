@@ -20,14 +20,15 @@ class Messaging(commands.Cog):
         await ctx.send("Test")
 
     @commands.command(name="mirror")
-    async def mirror(self,ctx,*args):
+    async def mirror(self,ctx: commands.Context,*args):
         """
-        This function deals with a user sending a !mirror command and it simply sends whatever
-        they send back to them.
-        Example command: '!mirror this is a test' results in the bot messaging back 'this is a test'
-        :param ctx: the context of the message
-        :param args: the string the user sends with the command
+        This function deals with a user sending a !mirror command, and it simply deletes their message
+        and sends whatever they sent into the discord channel.
+        Example command: '!mirror this is a test' results in the bot messaging back 'this is a test'.
+        :param ctx: the context of the message.
+        :param args: the string the user sends with the command.
         """
+        await ctx.message.delete()
         message = " ".join(args)
         log_message(ctx,"Mirror command:\n   message: \'"+message+"\'\n")
         await ctx.send(message)
@@ -37,9 +38,9 @@ class Messaging(commands.Cog):
         """
         This function deals with a user sending a !spam command, a mention of a user or group and a number.
         The bot will then mention the user or group the number of times it was told.
-        Example command: '!spam @everyone 2' results in 2 messages by the bot of @everyone
-        :param ctx: the context of the message
-        :param args: the user or group you want to mention and the number of times you want the bot to mention them
+        Example command: '!spam @everyone 2' results in 2 messages by the bot of @everyone.
+        :param ctx: the context of the message.
+        :param args: the user or group you want to mention and the number of times you want the bot to mention them.
         """
         log_message(ctx,"Spam command:\n   mentioned: "+str(args[0])+"\n   amount: " + str(args[1]) + "\n")
         for x in range(int(args[1])):
@@ -51,10 +52,10 @@ class Messaging(commands.Cog):
         """
         This function deals with a user sending a !forward command, and it simply sends whatever
         the users send to the person or group who they mention and the bot deletes their message, so it's anonymous.
-        Example command: '!forward @user this is a test' results in the bot messaging back '@user this is a test'
-        :param ctx: the context of the message
-        :param member: the group or person the user wants to forward it to example @role
-        :param message: the string the user sends with the command to be forwarded
+        Example command: '!forward @user this is a test' results in the bot messaging back '@user this is a test'.
+        :param ctx: the context of the message.
+        :param member: the group or person the user wants to forward it to example @role.
+        :param message: the string the user sends with the command to be forwarded.
         """
         mention = member.mention
         if(member.name[0] == "@"):  # this must be done to allow @everyone and other roles starting with @ to work otherwise it sends out @@everyone

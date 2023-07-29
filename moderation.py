@@ -10,11 +10,23 @@ class Moderation(commands.Cog):
         self.bot = bot
 
     def moderation_channel(self,ctx):
+        """
+        This function gets and returns the moderation channel of a server,
+        given the context of a message from the server.
+        :param ctx: the context of the message
+        :return: a discord.TextChannel that represents the moderation channel
+        """
         return discord.utils.get(ctx.guild.channels, name="moderation")
 
 
     @commands.command(name="ban")
     async def ban(self,ctx,member: discord.Member,*reason):
+        """
+
+        :param ctx: the context of the message
+        :param member: the member you want to ban
+        :param reason: the reason why you want to ban the member
+        """
         reason = " ".join(reason)
         log_message(ctx,"ban command:\n   user being banned: "+str(member)+"\n   reason: \'" + reason + "\'\n")
         await ctx.message.delete()
@@ -24,6 +36,12 @@ class Moderation(commands.Cog):
 
     @commands.command(name="kick")
     async def kick(self,ctx,member: discord.Member,*reason):
+        """
+
+        :param ctx: the context of the message
+        :param member: the member you want to kick
+        :param reason: the reason why you want to kick the member
+        """
         reason = " ".join(reason)
         log_message(ctx,"kick command:\n   user being kicked: "+str(member)+"\n   reason: \'" + reason + "\'\n")
         await ctx.message.delete()
@@ -33,6 +51,11 @@ class Moderation(commands.Cog):
     @kick.error
     @ban.error
     async def ban_kick_error(self,ctx,error):
+        """
+
+        :param ctx: the context of the message
+        :param error: the error that occured in the ban or kick function
+        """
         if isinstance(error, commands.MemberNotFound):
             log_message(ctx,"incorrect use of "+ctx.command.name+" command user does not exist:\n")
             await ctx.message.delete()
@@ -41,6 +64,11 @@ class Moderation(commands.Cog):
             raise error
 
     async def delete_all_messages(self,channel,member):
+        """
+
+        :param channel: the channel you want to delete messages from
+        :param member: the user whose messages you want to delete
+        """
         # NOTE history is used over purge with a check lamda due to purge only being able to search the last 100 messages so if the user is not active the command wouldn't have worked
         all_messages = channel.history(limit=None)
         async for message in all_messages:
@@ -50,6 +78,12 @@ class Moderation(commands.Cog):
 
     @commands.command(name="delete")
     async def delete(self, ctx: commands.Context, member: discord.Member,*type):
+        """
+
+        :param ctx: the context of the message
+        :param member: the user whose messages you want to delete
+        :param type: either None or a list of strings the first of which should be 'all'
+        """
         if len(type) != 0:
             if type[0] == "all":
                 log_message(ctx, "delete all command:\n   user's messages being deleted: " + str(member) + "\n")
@@ -67,6 +101,11 @@ class Moderation(commands.Cog):
 
     @commands.command(name="clear")
     async def clear(self,ctx: commands.Context,size: int):
+        """
+
+        :param ctx: the context of the message
+        :param size: the amount of messages you want to delete
+        """
         log_message(ctx,"clear command:\n   number of messages being deleted: "+str(size)+"\n")
         total = size
         for x in range(1+int(size/100)):   # purge has a max limit of 100 so this determines how many times to run purge
@@ -79,6 +118,12 @@ class Moderation(commands.Cog):
 
     @commands.command(name="banword")
     async def ban_word(self,ctx: commands.Context,word: str):
+        """
+
+        :param ctx: the context of the message
+        :param word: the word you want banned
+        :return:
+        """
         lines = open("banned_words.txt", "r").readlines()
         lines = [str(line.replace("\n","") + " " + word + "\n") for line in lines if str(ctx.guild.id) in line]
         log_message(ctx,"ban word command:\n   word banned: "+word+"\n")
@@ -91,6 +136,11 @@ class Moderation(commands.Cog):
 
     @commands.command(name="unbanword")
     async def unban_word(self,ctx: commands.Context,word: str):
+        """
+
+        :param ctx: the context of the message
+        :param word: the word you want unbanned
+        """
         lines = open("banned_words.txt", "r").readlines()
         lines = [re.sub(("(^|\s)"+word+"($|\s)"),"",line) for line in lines if str(ctx.guild.id) in line]
         log_message(ctx,"unban word command:\n   word unbanned: "+word+"\n")
@@ -103,13 +153,17 @@ class Moderation(commands.Cog):
 
     @commands.command(name= "banwords")
     async def list_ban_words(self,ctx: commands.Context):
+        """
+
+        :param ctx: the context of the message
+        """
         banned_words = self.bot.banned_words[ctx.guild.id]
         await ctx.send(content=ctx.message.author.mention,embed=discord.Embed(title="Banned words",
                                                                               description="Using any of these words will lead to your message being delete and you possibly being kicked or banned.",
                                                                               colour=discord.Colour.red()
                                                                               ).add_field(name="The list of banned words are :",value="\n".join(banned_words),inline=True).set_thumbnail(url="https://raw.githubusercontent.com/Michael-Perdue/Discord-bot/master/ban.png"))
 
-        
+
 
 async def setup(bot):
     await bot.add_cog(Moderation(bot))

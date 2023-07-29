@@ -4,6 +4,7 @@ from discord.ext import commands
 import os
 import re
 
+
 class Bot(commands.Bot):
     banned_words = {}
     def __init__(self):
@@ -17,6 +18,7 @@ class Bot(commands.Bot):
             allowed_mentions=discord.AllowedMentions(everyone=True,roles=True,replied_user=True,users=True)
         )
         self.init_extensions = ["messaging","clock","moderation","fun"]
+
 
     async def setup_hook(self):
         """
@@ -99,6 +101,14 @@ class Bot(commands.Bot):
 
 
 bot = Bot()
+
+@bot.command()
+@commands.guild_only()
+@commands.is_owner()
+async def sync(ctx: commands.Context) -> None:
+    synced = await ctx.bot.tree.sync()
+    await ctx.send("Synced "+str(len(synced))+" commands")
+    log_message(ctx,"SYNC command used:\n   commands synced: " + str(len(synced)) + "\n")
 
 def log_message(ctx, message):
     """
