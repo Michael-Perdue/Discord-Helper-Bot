@@ -54,7 +54,6 @@ class Bot(commands.Bot):
         print(botID + " has connected to:")
         for server in self.guilds:      # loops through all the servers that the bot is already setup to use
             print(" " + str(server))
-            print(" " + str(server.id))
         print("")
         self.read_banned_words()
         self.add_guilds()

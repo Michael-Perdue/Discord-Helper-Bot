@@ -21,34 +21,38 @@ class Moderation(commands.Cog):
         return discord.utils.get(ctx.guild.channels, name="moderation")
 
 
-    @commands.command(name="ban")
-    async def ban(self,ctx,member: discord.Member,*reason):
+    @commands.has_permissions(administrator=True)
+    @commands.hybrid_command(name="ban",description="Bans a user and the bot sends them a dm stating the reason")
+    async def ban(self,ctx: commands.Context,member: discord.Member,reason: str) -> None:
         """
 
         :param ctx: the context of the message
         :param member: the member you want to ban
         :param reason: the reason why you want to ban the member
         """
-        reason = " ".join(reason)
         log_message(ctx,"ban command:\n   user being banned: "+str(member)+"\n   reason: \'" + reason + "\'\n")
-        await ctx.message.delete()
+        await ctx.send(member.mention + " Has been banned",ephemeral=True,delete_after=10)
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has banned " + str(member.mention) + " for: " + reason)
         await member.ban(reason=reason)
+        dm = await member.create_dm()
+        await dm.send("You have been permanently banned from " + ctx.guild.name + " for: " + reason)
 
 
-    @commands.command(name="kick")
-    async def kick(self,ctx,member: discord.Member,*reason):
+    @commands.has_permissions(administrator=True)
+    @commands.hybrid_command(name="kick",description="Kicks a user and the bot sends them a dm stating the reason")
+    async def kick(self,ctx,member: discord.Member,reason: str) -> None:
         """
 
         :param ctx: the context of the message
         :param member: the member you want to kick
         :param reason: the reason why you want to kick the member
         """
-        reason = " ".join(reason)
         log_message(ctx,"kick command:\n   user being kicked: "+str(member)+"\n   reason: \'" + reason + "\'\n")
-        await ctx.message.delete()
+        await ctx.send(member.mention + " Has been kicked",ephemeral=True,delete_after=10)
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has kicked " + str(member.mention) + " for: " + reason)
         await member.kick(reason=reason)
+        dm = await member.create_dm()
+        await dm.send("You have been Kicked from " + ctx.guild.name + " for: " + reason)
 
     @kick.error
     @ban.error
