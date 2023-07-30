@@ -4,7 +4,6 @@ import discord
 from typing import Optional
 from discord.ext import commands
 from main import log_message
-import re
 
 class Clock(commands.Cog):
     stopwatches = {}
@@ -81,10 +80,10 @@ class Clock(commands.Cog):
     async def stopwatch_time(self, ctx: commands.Context):
         time_elapsed = time.time()-self.stopwatches[ctx.message.author]
         await ctx.send(embed=discord.Embed(title="Stopwatch",
-                                                                               description=(ctx.message.author.mention + " Information on your stopwatch "),
-                                                                               colour=discord.Colour.blue()
-                                                                               ).add_field(name="Start time", value=str(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(self.stopwatches[ctx.message.author]))), inline=True
-                                                                               ).add_field(name="Time elapsed", value="{:.2f}".format(time_elapsed) + " seconds", inline=False))
+                                           description=(ctx.message.author.mention + " Information on your stopwatch "),
+                                           colour=discord.Colour.blue()
+                                           ).add_field(name="Start time", value=str(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(self.stopwatches[ctx.message.author]))), inline=True
+                                           ).add_field(name="Time elapsed", value="{:.2f}".format(time_elapsed) + " seconds", inline=False))
         log_message(ctx, "Stopwatch command time checked:\n   time elapsed: " + str(time_elapsed) + " seconds\n")
 
 

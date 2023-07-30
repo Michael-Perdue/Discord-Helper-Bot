@@ -31,7 +31,6 @@ class Bot(commands.Bot):
     def read_banned_words(self):
         file = open("banned_words.txt","r")
         for x in file:
-            print(x)
             split_line = list(x.replace("\n","").split(" "))
             self.banned_words[int(split_line[0])] = split_line[1:]
         file.close()
