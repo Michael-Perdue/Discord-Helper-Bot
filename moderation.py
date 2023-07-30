@@ -83,17 +83,17 @@ class Moderation(commands.Cog):
                     return
                 await asyncio.sleep(1)  # This has to be done due to throttle limiting of deletions
 
-
+    @commands.has_permissions(administrator=True)
     @commands.hybrid_command(name="delete",description="Deletes all of a specific users messages from this channel or all channels")
-    async def delete(self, ctx: commands.Context, member: discord.Member,amount: Optional[int]=-1,all_channels: Optional[bool]=False) -> None:
+    async def delete_messages(self, ctx: commands.Context, member: discord.Member,amount: Optional[int]=-1,all_channels: Optional[bool]=False) -> None:
         """
 
         :param ctx: the context of the message
         :param member: the user whose messages you want to delete
-        :param amount: by default is -1 meaing all messages are deleted if set to a number, then only that number of messages are deleted
+        :param amount: by default all messages are deleted if set to a number, then only that number of messages are deleted
         :param all_channels: by default is false if set to true then all users messages from all channels are deleted
         """
-        await ctx.send("Deletion commencing",ephemeral=True)
+        await ctx.send("Deletion commencing",ephemeral=True,delete_after=10)
         if all_channels:
             log_message(ctx, "delete all command:\n   user's messages being deleted: " + str(member) + "\n")
             channels = ctx.guild.text_channels
@@ -104,61 +104,67 @@ class Moderation(commands.Cog):
             log_message(ctx,"delete command:\n   user's messages being deleted: "+str(member)+"\n")
             await self.delete_all_messages(channel=ctx.channel,member=member,amount=amount)
             await self.moderation_channel(ctx).send(ctx.message.author.mention + " has deleted " + (str(amount) if amount != -1 else "all") + " of " + str(member.mention) + " messages from " + ctx.channel.mention)
+        await ctx.send("Deletion complete",ephemeral=True)
 
-    @commands.command(name="clear")
-    async def clear(self,ctx: commands.Context,size: int):
+    @commands.has_permissions(administrator=True)
+    @commands.hybrid_command(name="clear",description="Deletes all of the last x messages from this channel with x being the amount you set")
+    async def clear(self,ctx: commands.Context,amount: int) -> None:
         """
 
         :param ctx: the context of the message
-        :param size: the amount of messages you want to delete
+        :param amount: the amount of messages you want to delete
         """
-        log_message(ctx,"clear command:\n   number of messages being deleted: "+str(size)+"\n")
-        total = size
-        for x in range(1+int(size/100)):   # purge has a max limit of 100 so this determines how many times to run purge
+        log_message(ctx,"clear command:\n   number of messages being deleted: "+str(amount)+"\n")
+        total = amount
+        await ctx.send("Clearing commencing", ephemeral=True,delete_after=10)
+        for x in range(1+int(amount/100)):   # purge has a max limit of 100 so this determines how many times to run purge
             if total<100:
                 await ctx.channel.purge(limit=total)
             else:
                 await ctx.channel.purge(limit=None)
                 total = total-100
-        await self.moderation_channel(ctx).send(ctx.message.author.mention + " has deleted the last " + str(size) + " messages from " + ctx.channel.mention)
+        await ctx.send("Clearing complete", ephemeral=True)
+        await self.moderation_channel(ctx).send(ctx.message.author.mention + " has deleted the last " + str(amount) + " messages from " + ctx.channel.mention)
 
-    @commands.command(name="banword")
-    async def ban_word(self,ctx: commands.Context,word: str):
+    @commands.has_permissions(administrator=True)
+    @commands.hybrid_command(name="banword",description="Bans a word, so makes it so any new message with that word gets deleted and reported to mod channel")
+    async def ban_word(self,ctx: commands.Context,word: str) -> None:
         """
 
         :param ctx: the context of the message
         :param word: the word you want banned
-        :return:
         """
         lines = open("banned_words.txt", "r").readlines()
-        lines = [str(line.replace("\n","") + " " + word + "\n") for line in lines if str(ctx.guild.id) in line]
+        lines = [str(line.replace("\n","") + " " + word + "\n") if str(ctx.guild.id) in line else line for line in lines]
         log_message(ctx,"ban word command:\n   word banned: "+word+"\n")
         file = open("banned_words.txt","w")
         file.writelines(lines)
         file.close()
         self.bot.banned_words[ctx.guild.id] = (self.bot.banned_words[ctx.guild.id] + [word])
-        await ctx.message.delete()
+        await ctx.send("\'" + word + "\' Has now been banned",ephemeral=True)
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has banned the word: " + word)
 
-    @commands.command(name="unbanword")
-    async def unban_word(self,ctx: commands.Context,word: str):
+    @commands.has_permissions(administrator=True)
+    @commands.hybrid_command(name="unbanword",description="Unbans a word which was previously banned")
+    async def unban_word(self,ctx: commands.Context,word: str) -> None:
         """
 
         :param ctx: the context of the message
         :param word: the word you want unbanned
         """
         lines = open("banned_words.txt", "r").readlines()
-        lines = [re.sub(("(^|\s)"+word+"($|\s)"),"",line) for line in lines if str(ctx.guild.id) in line]
+        lines = [(str(ctx.guild.id) + " " + str(re.sub(("(^|\s)"+word+"($|\s)"),"",line.partition(" ")[2])))if str(ctx.guild.id) in line else line for line in lines]
         log_message(ctx,"unban word command:\n   word unbanned: "+word+"\n")
         file = open("banned_words.txt","w")
         file.writelines(lines)
         file.close()
         self.bot.banned_words[ctx.guild.id] = [word1 for word1 in self.bot.banned_words[ctx.guild.id] if word1 != word]
-        await ctx.message.delete()
+        await ctx.send("\'" + word + "\' Has now been unbanned",ephemeral=True)
         await self.moderation_channel(ctx).send(ctx.message.author.mention + " has unbanned the word: " + word)
 
-    @commands.command(name= "banwords")
-    async def list_ban_words(self,ctx: commands.Context):
+
+    @commands.hybrid_command(name="banwords",description="Gives a list of all banned words")
+    async def list_ban_words(self,ctx: commands.Context) -> None:
         """
 
         :param ctx: the context of the message
