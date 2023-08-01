@@ -1,6 +1,7 @@
 import discord
 from discord import Message
 from discord.ext import commands
+from pathlib import Path
 import os
 import re
 
@@ -29,6 +30,9 @@ class Bot(commands.Bot):
             await self.load_extension(extension)
 
     def read_banned_words(self):
+        if not Path("./banned_words.txt").is_file():
+            #creates a new file through opening it on write
+            open("banned_words.txt", "a").close()
         file = open("banned_words.txt","r")
         for x in file:
             split_line = list(x.replace("\n","").split(" "))
