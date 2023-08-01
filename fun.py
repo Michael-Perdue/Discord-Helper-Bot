@@ -25,6 +25,15 @@ class Fun(commands.Cog):
         await ctx.send(" The dice landed on **" + " ".join(result) + "**")
         log_message(ctx,"roll command used:\n   amount of dice: " + amount + "\n   sides of dice: " + size + "\n")
 
+    @commands.hybrid_command(name="8ball",description="get the eightball to answer your question")
+    async def eight_ball(self,ctx: commands.Context,question: str) -> None:
+        eightball_results = ["It is certain","Reply hazy try again","Don’t count on it", "It is decidedly so", "Ask again later",
+                             "My reply is no","Without a doubt","Better not tell you now","My sources say no","Yes definitely",
+                             "Cannot predict now","Outlook not so good","You may rely on it","Concentrate and ask again","Very doubtful",
+                             "As I see it, yes","Most likely","Outlook good","Yes","Signs point to yes"	]
+        await ctx.send(" The eight ball responds with **" + eightball_results[random.randint(0,len(eightball_results)-1)] + "** to the question *" +question +"*")
+        log_message(ctx,"eightball command used:\n")
+
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Fun(bot))
