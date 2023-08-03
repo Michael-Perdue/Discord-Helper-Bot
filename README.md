@@ -27,7 +27,7 @@ Below is a gif of this happening:
 #### Adding a new ban word to the message filtering
 
 Command: */banword word*   
-: *word* - The word you want banned from the server
+*word* - The word you want banned from the server  
 Example use: */banword 'badword'*  
 
 **You must be an administrator to use this command**, provided you are an administrator to ban a word, simply, all you need to do is */banword* then the word you want to ban. What this will do is store that word as a banned word for the server the command was executed on and it will persistently store this so you don't have to worry about the bot crashing and losing your list of banned words. Upon executing the command the bot will send an ephemeral message so no one but you can see it, the message says the word is banned and then it creates a new log in the moderation channel which will then state which user banned which word.
@@ -39,7 +39,7 @@ Below is a gif of this command in use:
 #### Removing a banned word from the message filtering
 
 Command: */unbanword word*  
-: *word* - The word you want unbanned from the server
+*word* - The word you want unbanned from the server  
 Example use: */unbanword 'badword'*  
 
 
@@ -51,8 +51,8 @@ Below is a gif of this command in use:
 
 #### Checking what words are banned in the message filtering
 
-Command: */banwords*
-: Example use: */banwords*  
+Command: */banwords*  
+Example use: */banwords*  
 
 To see all the words which are banned and automatically filtered you can use the */banwords* command, this will return a discord embed message that everyone on the server can see with all the words that are banned on this server. 
 
@@ -67,7 +67,7 @@ Discord for various reasons has no way on the user side to delete a bulk amount 
 ### Deleting all user's messages in a channel
 
 Command: */delete member*  
-: *member* - The member whose messages you want to delete  
+*member* - The member whose messages you want to delete  
 Example use: */delete @michael*  
 
 **You must be an administrator to use this command**, provided you are an administrator to delete all messages from a certain user all you have to do is */delete* followed by the @user you want to delete all messages from in this channel. This will lead to all messages from that user being deleted from the channel and it will send an ephemeral message so no one but you can see it saying the deletion has started and that message self-deletes after 10 seconds. Upon completion of the deletion, the bot will send another ephemeral message (this one doesn't self-delete) to state it has been completed and it will send a message/log in the moderation channel stating the user who used the command, the channel the deleted the messages were from and the user whose message was deleted. It is important to note due to the throttling of discord API it is only possible to delete one message per second, so it will take x seconds to complete with x being the number of messages they have sent in the channel.
@@ -79,8 +79,8 @@ Below is a gif of this command in use:
 ### Deleting all a user's messages
 
 Command: */delete member all*  
-: *member* - The member whose messages you want to delete
-*all* - Optional by default False if set to True deletes the members messages from all channels not just this one
+*member* - The member whose messages you want to delete  
+*all* - Optional by default False if set to True deletes the members messages from all channels not just this one  
 Example use: */delete @michael True* 
 
 
@@ -93,7 +93,7 @@ Below is a gif of this command in use:
 ### Deleting the last x messages from a channel
 
 Command: */clear amount*   
-: *amount* - The number of messages you want deleted from the channel
+*amount* - The number of messages you want deleted from the channel   
 Example use: */clear 10*
 
 
@@ -110,8 +110,8 @@ Both Kicking and banning exist already default unlike all these other commands I
 #### Kicking a user
 
 Command: */kick user reason*  
-: *user* - The person you want to ban  
-*reason* - The reason why they are being banned
+*user* - The person you want to ban  
+*reason* - The reason why they are being banned  
 Example use: */kick @michael 'idiot'*  
 
 
@@ -120,8 +120,8 @@ Example use: */kick @michael 'idiot'*
 #### Banning a user
 
 Command: */ban user reason*  
-: *user* - The person you want to kick  
-*reason* - The reason why they are being kicked
+*user* - The person you want to kick  
+*reason* - The reason why they are being kicked  
 Example use: */ban @michael 'idiot'*  
 
 
@@ -140,15 +140,15 @@ Below is a gif of the stopwatch functionality working with all 3 command variati
 
 #### Starting the stopwatch
 
-Command: */stopwatch start*
-:  Example use: */stopwatch start*  
+Command: */stopwatch start*  
+Example use: */stopwatch start*  
 
 To start the stopwatch all you need to do is type */stopwatch start* and then the bot will respond telling you the stopwatch has started. **If start the stopwatch again at any point it will just reset/restart**.
 
 #### Checking the stopwatch
 
-Command: */stopwatch time*
-: Example use: */stopwatch time*  
+Command: */stopwatch time*  
+Example use: */stopwatch time*  
 
 To check when the stopwatch was started and how long it has been going all you need to do is type */stopwatch time*. You can check the time however many times you want without any issues. Upon entering the command the bot will respond with a discord embed message with the start time and the amount of seconds passed.
 
@@ -158,8 +158,8 @@ The embed message looks like this:
 
 #### Stopping the stopwatch
 
-Command: */stopwatch stop*
-: Example use: */stopwatch stop*  
+Command: */stopwatch stop*  
+Example use: */stopwatch stop*  
 
 To stop the stopwatch all you need to do is type */stopwatch stop*. Upon entering the command the bot will respond with a discord embed message with the start time, end time and the amount of seconds passed.
 
@@ -189,8 +189,8 @@ Here is a screenshot of the 1 hour timer going off which was set at the end of t
 ### Countdown
 
 Command: */countdown x*  
-: *x* - The number you want the countdown to start at
-Example use: */countdown 3'*  
+*x* - The number you want the countdown to start at  
+Example use: */countdown 3'*   
 
 You can get the bot to countdown from a given number by typing */countdown* followed by the number you want the bot to countdown from and after reaching 1 the bot will notify you stating it's finished. 
 
@@ -202,8 +202,8 @@ Below is a gif of the countdown command working:
 
 ### Eight-ball
 
-Command: */8ball question*
-: *question* - The question you want the 8-ball to answer
+Command: */8ball question*  
+*question* - The question you want the 8-ball to answer  
 Example use: */8ball 'will it rain?'*  
 
 You can get the bot to answer your question with an eightball response by typing */8ball* followed by the question you want the bot to answer. The bot will then respond with a random answer from the possible answers an eight ball could give. 
@@ -214,8 +214,8 @@ Below is a gif of the eight-ball flip command working:
 
 ### Coin flip
 
-Command: */coin times*
-: *times* - The number of times you want to flip the coin
+Command: */coin times*  
+*times* - The number of times you want to flip the coin  
 Example use: */coin 2*  
 
 
@@ -228,8 +228,8 @@ Below is a gif of the coin flip command working:
 ### Dice rolls
 
 Command: */dice amount sides*  
-: *amount* - The number of dice you want to roll  
-*sides* - The number of sides on the dice
+*amount* - The number of dice you want to roll  
+*sides* - The number of sides on the dice  
 Example use: */dice 1 6*  
 
 You can get the bot to roll dice for you by typing */dice* followed by the amount of dice you want it roll and the number of sides on the dice. The bot will then respond with the roll result of the dice. 
@@ -242,8 +242,8 @@ Below is a gif of the dice roll command working:
 
 ### Greeting 
 
-Command: */hey* 
-: Example use: */hey*  
+Command: */hey*  
+Example use: */hey*  
 
 The bot can greet you if you type /hey it will respond with Hello followed by your name.
 
@@ -254,7 +254,7 @@ Below is a gif of the greeting command working:
 ### Mirror 
 
 Command: */mirror message*  
-: *message* - What you want the bot to repeat
+*message* - What you want the bot to repeat  
 Example use: */mirror 'I am not a bot'*  
 
 The bot can anonymously send your message to the channel by typing */mirror* followed by the message. The bot will then respond with an ephemeral message which will delete instantly so that no one can see that you sent the message and then the bot will simply send your message to the channel.
@@ -266,8 +266,8 @@ Below is a gif of the mirror command working:
 ### Forwarding
 
 Command: */forward member message*  
-: *member* - Could be a group or user (example @user or @role) that you want to anonymously recieve the message  
-*message* - What you want to forward to the group or user
+*member* - Could be a group or user (example @user or @role) that you want to anonymously recieve the message  
+*message* - What you want to forward to the group or user  
 Example use: */forward @michael 'stop that'*  
 
 The bot can anonymously forward your message to someone in the channel by typing */forward* followed by the person or group you want to mention and the message. The bot will then respond with an ephemeral message which will delete instantly so that no one can see that you sent the message and then the bot will forward the message by mentioning the person in the channel and then sending your message to the channel. **This command doesn't need you to be an administrator however it does send a log to the moderation channel stating who got the bot to forward the message, what the message was and who it was to.**
@@ -279,8 +279,8 @@ Below is a gif of the forwarding command working:
 ### Spam
 
 Command: */spam member times*  
-: *member* - Could be a group or user (example @user or @role) that you want to notify  
-*times* - How many notifications you want to send to the user or group
+*member* - Could be a group or user (example @user or @role) that you want to notify  
+*times* - How many notifications you want to send to the user or group  
 Example use: */spam @everyone 10*  
 
 You can spam a group or user by typing */spam* followed by the number of times you want to notify them. The bot will then reply to that command (everyone can see who told the bot to spam) and send that many messages with them mentioned. 
