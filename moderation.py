@@ -131,6 +131,7 @@ class Moderation(commands.Cog):
         :param ctx: the context of the message
         :param word: the word you want banned
         """
+        word = word.lower()
         # Gets a list of lines from the txt file
         lines = open("banned_words.txt", "r").readlines()
         # Finds the line with the id the same as the server the message is from and adds the word
@@ -153,6 +154,7 @@ class Moderation(commands.Cog):
         :param ctx: the context of the message
         :param word: the word you want unbanned
         """
+        word = word.lower()
         # Gets a list of lines from the txt file
         lines = open("banned_words.txt", "r").readlines()
         # Finds the line with the id the same as the server the message is from and removes the word along with any extra whitespace

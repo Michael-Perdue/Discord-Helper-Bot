@@ -91,8 +91,9 @@ class Bot(commands.Bot):
             raise error
 
     async def on_message(self, message: Message):
+        tempMessage = message.content.lower()
         if(message.author.id != self.user.id and "!unbanword" not in message.content):
-            check_word = [word for word in self.banned_words[message.guild.id] if(re.search(("(^|\s)"+word+"($|\s)"),message.content))]
+            check_word = [word for word in self.banned_words[message.guild.id] if(re.search(("(^|\s)"+word+"($|\s)"),tempMessage))]
             if bool(check_word):
                 await message.delete()
                 await discord.utils.get(message.guild.channels, name="moderation").send(message.author.mention + " just tried to use banned word/s \'" + "\' \'".join(check_word) + "\' in channel: " + message.channel.mention )
