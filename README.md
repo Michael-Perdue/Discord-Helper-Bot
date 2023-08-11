@@ -4,7 +4,7 @@
 
 There exist many different discord bots already like [MEE6](https://mee6.xyz/en/) or [DYNO](https://dyno.gg/) and others which all have probably more functionality overall than the helper bot that I have made has. With that being said the issue with these bots is that they are mostly each specialized for one function so like [DYNO](https://dyno.gg/) is built for moderation and discord server management which means if I also want to be able to have a command to do a coin flip or roll a dice then I would need another discord bot like MEE6. This then leads to me having to search multiple sites for all the commands and you also have to hope they use unique identifiers or use different slash commands as 2 bots could use '!' to start their command which would then cause issues. So noticing this issue I decided to make a bot mainly for personal/friend use as I just wanted to have one bot which does everything I need.
 
-So this page covers all the functionality of the bot without getting bogged down with the implementation side of things which is covered on a [separate page](https://michael-perdue.github.io/posts/How-My-Discord-Bot-Works/). This page is also perfect for anyone using the bot and wanting to know all the commands it provides. 
+So this readme covers all the functionality of the bot without getting bogged down with the implementation side of things which is covered on a [separate page](https://michael-perdue.github.io/posts/How-My-Discord-Bot-Works/). It is also perfect for anyone using the bot and wanting to know all the commands it provides. 
 
 # Helper bot Functions and commands
 
