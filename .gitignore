@@ -1,2 +1,3 @@
 __pycache__/
 banned_words.txt
+.env

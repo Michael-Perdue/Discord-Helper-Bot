@@ -133,12 +133,12 @@ class Moderation(commands.Cog):
         """
         word = word.lower()
         # Gets a list of lines from the txt file
-        lines = open("banned_words.txt", "r").readlines()
+        lines = open("discordbot/banned_words.txt", "r").readlines()
         # Finds the line with the id the same as the server the message is from and adds the word
         lines = [str(line.replace("\n","") + " " + word + "\n") if str(ctx.guild.id) in line else line for line in lines]
         log_message(ctx,"ban word command:\n   word banned: "+word+"\n")
         # Writes the lines with the adjusted line back to the banned_words txt file
-        file = open("banned_words.txt","w")
+        file = open("discordbot/banned_words.txt","w")
         file.writelines(lines)
         file.close()
         # Adds the word to the banned_words dictionary with the key being the servers id
@@ -156,12 +156,12 @@ class Moderation(commands.Cog):
         """
         word = word.lower()
         # Gets a list of lines from the txt file
-        lines = open("banned_words.txt", "r").readlines()
+        lines = open("discordbot/banned_words.txt", "r").readlines()
         # Finds the line with the id the same as the server the message is from and removes the word along with any extra whitespace
         lines = [(str(ctx.guild.id) + " " + str(re.sub(("(^|\s)"+word+"($|\s)"),"",line.partition(" ")[2])))if str(ctx.guild.id) in line else line for line in lines]
         log_message(ctx,"unban word command:\n   word unbanned: "+word+"\n")
         # Writes the lines with the adjusted line back to the banned_words txt file
-        file = open("banned_words.txt","w")
+        file = open("discordbot/banned_words.txt","w")
         file.writelines(lines)
         file.close()
         # Removes the word to the banned_words dictionary with the key being the servers id

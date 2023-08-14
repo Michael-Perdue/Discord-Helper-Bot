@@ -30,17 +30,17 @@ class Bot(commands.Bot):
             await self.load_extension(extension)
 
     def read_banned_words(self):
-        if not Path("./banned_words.txt").is_file():
+        if not Path("discordbot/banned_words.txt").is_file():
             #creates a new file through opening it on write
-            open("banned_words.txt", "a").close()
-        file = open("banned_words.txt","r")
+            open("discordbot/banned_words.txt", "a").close()
+        file = open("discordbot/banned_words.txt","r")
         for x in file: # reads each line in the file
             split_line = list(x.replace("\n","").split(" ")) # splits the line into a list
             self.banned_words[int(split_line[0])] = split_line[1:]
         file.close()
 
     def add_guilds(self):
-        file = open("banned_words.txt","a")
+        file = open("discordbot/banned_words.txt","a")
         found_guilds = self.banned_words.keys()
         for guild in self.guilds:
             if guild.id not in found_guilds:
