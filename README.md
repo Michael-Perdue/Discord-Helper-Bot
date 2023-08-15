@@ -6,6 +6,11 @@ There exist many different discord bots already like [MEE6](https://mee6.xyz/en/
 
 So this readme covers all the functionality of the bot without getting bogged down with the implementation side of things which is covered on a [separate page](https://michael-perdue.github.io/posts/How-My-Discord-Bot-Works/). It is also perfect for anyone using the bot and wanting to know all the commands it provides. 
 
+# Running the bot and the Docker image for this project
+
+This bot runs 24/7 on a VPS and you can add it to your server by clicking [Here](https://discord.com/api/oauth2/authorize?client_id=1132368957857337554&permissions=8&scope=applications.commands%20bot) which gives it permissions to act as an administrator and create application commands (/commands). If you want a bot that has all this functionality but is your own and uses your own token then you can do this by pulling this [docker image](https://hub.docker.com/repository/docker/michaelperdue/discord-helper-bot/general) which to then run you just have pass your token through environment variables so to run the docker image just do ```sudo docker run -d --env-file=discord.env discord-bot
+sudo docker run -d --env TOKEN='your_discord_token' discord-helper-bot``` . For more on the setup of the discord bot, the VPS and docker image it is covered on a [separate page](https://michael-perdue.github.io/posts/Running-My-Discord-Bot-On-A-VPS/).
+
 # Helper bot Functions and commands
 
 ## Moderation functions and commands
